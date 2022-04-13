@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <script src="../handle.js"></script> -->
+</head>
+
+<body>
+    <section class="vh-100" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-lg-9 col-xl-7">
+                    <div class="card rounded-3">
+                        <div class="card-body p-4">
+
+                            <h4 class="text-center my-3 pb-3">To Do App</h4>
+
+                            <form class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2" method="post" action="/task">
+                                <div class="col-12">
+                                    <div class="form-outline">
+                                        <label class="form-label" for="form1">Enter a task:</label>
+                                        <input type="text" id="form1" name="description" class="form-control" required/>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+
+
+                            </form>
+
+                            <table class="table mb-4">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No.</th>
+                                        <th scope="col">Todo item</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i < tasks.length; i++) {%>
+                                        <tr>
+                                            <th scope="row">
+                                                <%= i+1 %>
+                                            </th>
+                                            <td>
+                                                <%= tasks[i].description %>
+                                            </td>
+                                            <td>
+                                                <% if(tasks[i].isComplete){ %>
+                                                    Completed
+                                                    <% } %>
+                                                        <% if(!tasks[i].isComplete){ %>
+                                                            Incomplete
+                                                            <% } %>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" id="del1" name="id" value=<%=tasks[i]._id %> />
+                                                <button id="delete-button" class="btn btn-danger" onclick="delte('<%=tasks[i]._id%>')">Delete</button>
+                                                <% if(tasks[i].isComplete){ %>
+                                                    <button id="update-button" class="btn btn-success ms-1" onclick="updte('<%=tasks[i]._id%>')">Incomplete</button>
+                                                    <% } %>
+                                                        <% if(!tasks[i].isComplete){ %>
+                                                            <button id="update-button" class="btn btn-success ms-1" onclick="updte('<%=tasks[i]._id%>')">Complete</button>
+                                                            <% } %>
+
+                                            </td>
+                                        </tr>
+                                        <%}%>
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+<script>
+    function delte(id) {
+        console.log("try")
+        fetch('/task/:id', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id,
+            })
+        }).then(response => {
+            if (response === 'No todo to delete') {
+                // messageDiv.textContent = 'No Darth Vadar quote to delete'
+            } else {
+                window.location.reload(true)
+            }
+        })
+
+    }
+
+    function updte(id) {
+        console.log("inside handle js")
+        fetch('/task/toggle/:id', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id,
+            })
+        }).then(response => {
+            console.log("response is:")
+            console.log(response)
+            if (response.status === 200) {
+                window.location.reload(true)
+                    // messageDiv.textContent = 'No Darth Vadar quote to delete'
+            }
+        })
+    }
+</script>
+
+
+
+
+</html>

@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "mongodb": "^4.5.0",
+    "request": "^2.88.2"
+  },
+  "name": "asst5",
+  "version": "1.0.0",
+  "description": "todo app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "roshdi",
+  "license": "ISC",
+  "keywords": [
+    "todo"
+  ]
+}
